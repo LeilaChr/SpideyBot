@@ -12,6 +12,7 @@ class TCPHandler:
         self.port = port
         self.type = type
         self.instance = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        return self
 
     def connect_socket(self, connections: int = 5) -> bool:
         match self.type:
