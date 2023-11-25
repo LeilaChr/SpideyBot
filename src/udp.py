@@ -48,7 +48,7 @@ class UDPClient:
         decoded_message = encoded_message.decode("utf-8")
         return decoded_message
 
-    def close_connection(self) -> bool:
+    def close(self) -> bool:
         try:
             self.instance.close()
             return True

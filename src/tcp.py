@@ -51,9 +51,6 @@ class TCPServer(TCPHandler):
             self.client = client
             self.address = address
 
-        def welcome(self):
-            self.send_msg("Hello from TCP!")
-
         def send_msg(self, message: str) -> int:
             # TODO: encryption
             encrypted_messsage = message

@@ -4,8 +4,6 @@ import sys
 import multiprocessing
 import socket
 
-# import chatbot
-
 
 class Server:
     def __init__(
@@ -16,14 +14,11 @@ class Server:
         self.start()
 
     def process_tcp(self, tcp_conn: "tcp.TCPServer.ClientConnection"):
-        tcp_conn.welcome()
-
         while True:
             try:
                 msg, address = tcp_conn.recv_msg()
                 if msg:
                     print(f"Received message from {address}: {msg}")
-                    # response = chatbot.get_response(msg)
                     response = "TCP"
                     if response:
                         tcp_conn.send_msg(response)
@@ -58,17 +53,20 @@ class Server:
         )
         p.start()
 
-    def new_udp_client(self) -> None:
+    def udp_client(self) -> None:
         p = multiprocessing.Process(target=self.process_udp, name="ProcessUDP")
         p.start()
 
     def start(self) -> None:
-        print("Server started")
+        print("Server started on IP: ", self.tcp_server.host)
+        print("Listening for TCP connections on port", self.tcp_server.port)
+        print("Listening for UDP messages on port", self.udp_server.port)
+        print()
 
         while True:
             tcp_client, tcp_address = self.tcp_server.accept_connection()
             self.new_tcp_client(tcp_client, tcp_address)
-            self.new_udp_client()
+            self.udp_client()
 
 
 if __name__ == "__main__":
