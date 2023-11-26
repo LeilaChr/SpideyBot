@@ -49,7 +49,7 @@ handler = Handler()
 handler.connect(ip_addr, udp_port, tcp_port)
 
 while True:
-    protocol = input("Select Protocol [TCP/UDP] (Q to Quit): ")
+    protocol = input("\nSelect Protocol [TCP/UDP] (Q to Quit): ")
     if protocol.lower() == "udp":
         msg = input(">>> ")
         handler.send_udp_msg(msg)
@@ -61,7 +61,7 @@ while True:
         handler.send_tcp_msg(msg)
         text = handler.tcp_client.recv_msg()
         if text:
-            print(text)
+            print(text + "\n")
     elif protocol.lower() == "q":
         handler.disconnect()
         break

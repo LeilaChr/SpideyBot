@@ -3,6 +3,7 @@ import udp
 import sys
 import multiprocessing
 import socket
+import gpt
 
 
 class Server:
@@ -18,10 +19,11 @@ class Server:
             try:
                 msg, address = tcp_conn.recv_msg()
                 if msg:
-                    print(f"Received message from {address}: {msg}")
-                    response = "TCP"
+                    print(f"Received message from {address}: {msg} over TCP")
+                    bot = gpt.ChatBot()
+                    response = bot.ask(msg)
                     if response:
-                        tcp_conn.send_msg(response)
+                        tcp_conn.send_msg("[TCP] " + response)
                         print(f"Sent message to client: {response}")
                     else:
                         tcp_conn.send_msg("Something went wrong.")
@@ -35,10 +37,12 @@ class Server:
             try:
                 msg, address = self.udp_server.recv_msg()
                 if msg:
-                    print(f"Received message from {address}: {msg}")
-                    response = "UDP"
+                    print(f"Received message from {address}: {msg} over UDP")
+                    bot = gpt.ChatBot()
+                    response = bot.ask(msg)
                     if response:
-                        self.udp_server.send_msg(response, address)
+                        self.udp_server.send_msg("[UDP] " + response, address)
+                        print(f"Sent message to client: {response}")
                     else:
                         self.udp_server.send_msg("Something went wrong.", address)
 
