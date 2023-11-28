@@ -52,13 +52,11 @@ def handle_protocol(protocol):
         handler.send_udp_msg()
         text = handler.udp_client.recv_msg()
         if text:
-            label.config(text=text)
             messagebox.showinfo("Success", text)
     elif protocol.lower() == "tcp":
         handler.send_tcp_msg()
         text = handler.tcp_client.recv_msg()
         if text:
-            label.config(text=text)
             messagebox.showinfo("Success", text)
     elif protocol.lower() == "q":
         handler.disconnect()
