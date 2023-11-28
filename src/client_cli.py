@@ -55,7 +55,7 @@ while True:
         handler.send_udp_msg(msg)
         text = handler.udp_client.recv_msg()
         if text:
-            print(text)
+            print(text + "\n")
     elif protocol.lower() == "tcp":
         msg = input(">>> ")
         handler.send_tcp_msg(msg)
