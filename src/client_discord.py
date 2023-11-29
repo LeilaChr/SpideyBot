@@ -131,5 +131,4 @@ async def quit_bot(ctx):
 # Run the bot with your Discord token
 load_dotenv()
 token = str(os.environ.get("DISCORD_TOKEN"))
-print(token)
 bot.run(token)
