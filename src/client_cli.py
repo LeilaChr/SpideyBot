@@ -28,18 +28,19 @@ class Handler:
             print("Error connecting to server")
 
     def disconnect(self):
-        if self.udp_client != None and self.tcp_client != None:
-            self.tcp_client.close()
+        if self.udp_client is not None:
             self.udp_client.close()
+        if self.tcp_client is not None:
+            self.tcp_client.close()
 
     def send_udp_msg(self, msg):
-        if self.udp_client != None:
+        if self.udp_client is not None:
             self.udp_client.send_msg(msg)
         else:
             print("No UDP connection established")
 
     def send_tcp_msg(self, msg):
-        if self.tcp_client != None:
+        if self.tcp_client is not None:
             self.tcp_client.send_msg(msg)
         else:
             print("No TCP connection established")
@@ -49,19 +50,31 @@ handler = Handler()
 handler.connect(ip_addr, udp_port, tcp_port)
 
 while True:
-    protocol = input("\nSelect Protocol [TCP/UDP] (Q to Quit): ")
+    protocol = input("\nSelect Protocol [TCP/UDP] (Q to Quit) (E to exit from conversation): ")
     if protocol.lower() == "udp":
-        msg = input(">>> ")
-        handler.send_udp_msg(msg)
-        text = handler.udp_client.recv_msg()
-        if text:
-            print(text + "\n")
+        while True:
+            msg = input(">>> ")
+            if msg.lower() == "e":
+                handler.send_udp_msg(msg)
+                break
+            handler.send_udp_msg(msg)
+            text = handler.udp_client.recv_msg()
+            if text:
+                print(text + "\n")            
+            else:
+                break
     elif protocol.lower() == "tcp":
-        msg = input(">>> ")
-        handler.send_tcp_msg(msg)
-        text = handler.tcp_client.recv_msg()
-        if text:
-            print(text + "\n")
+        while True:
+            msg = input(">>> ")
+            if msg.lower() == "e":
+                handler.send_tcp_msg(msg)
+                break
+            handler.send_tcp_msg(msg)
+            text = handler.tcp_client.recv_msg()
+            if text:
+                print(text + "\n")
+            else:
+                break
     elif protocol.lower() == "q":
         handler.disconnect()
         break

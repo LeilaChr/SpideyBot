@@ -12,18 +12,30 @@ class Server:
     ) -> "Server":
         self.tcp_server = tcp_server
         self.udp_server = udp_server
+        self.user_context = {}  
         self.start()
 
     def process_tcp(self, tcp_conn: "tcp.TCPServer.ClientConnection"):
         while True:
             try:
                 msg, address = tcp_conn.recv_msg()
+                address_key = address[0] + ", " + str(address[1])
                 if msg:
+                    if address_key not in self.user_context:
+                        self.user_context[address_key] = {"conversation": []}
                     print(f"Received message from {address}: {msg} over TCP")
+                    if msg.lower() == "e":
+                        # Clear conversation context for the client
+                        self.user_context[address_key]["conversation"] = []
+                        print(f"Context cleared for client: {address_key}")
+                        continue
                     bot = gpt.ChatBot()
-                    response = bot.ask(msg)
+                    context = self.user_context[address_key]["conversation"]
+                    response = bot.ask(msg, context)
+                    self.user_context[address_key]["conversation"].append({"role": "user", "content": msg})
                     if response:
                         tcp_conn.send_msg("[TCP] " + response)
+                        self.user_context[address_key]["conversation"].append({"role": "assistant", "content": response})
                         print(f"Sent message to client: {response}")
                     else:
                         tcp_conn.send_msg("Something went wrong.")
@@ -36,12 +48,22 @@ class Server:
         while True:
             try:
                 msg, address = self.udp_server.recv_msg()
+                address_key = address[0] + ", " + str(address[1])
                 if msg:
                     print(f"Received message from {address}: {msg} over UDP")
+                    if msg.lower() == "e":
+                        # Clear conversation context for the client
+                        self.user_context[address_key]["conversation"] = []
+                        print(f"Context cleared for client: {address_key}")
+                        continue
                     bot = gpt.ChatBot()
-                    response = bot.ask(msg)
+                    context = self.user_context.get(address_key, {"conversation": []})["conversation"]
+                    response = bot.ask(msg, context)
+                    self.user_context[address_key] = {"conversation": context}
+
                     if response:
                         self.udp_server.send_msg("[UDP] " + response, address)
+                        self.user_context[address_key]["conversation"].append({"role": "assistant", "content": response})
                         print(f"Sent message to client: {response}")
                     else:
                         self.udp_server.send_msg("Something went wrong.", address)
