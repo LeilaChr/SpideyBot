@@ -3,6 +3,7 @@ from tkinter import messagebox
 import tcp
 import udp
 
+
 class Handler:
     def __init__(self):
         self.udp_client = None
@@ -18,7 +19,9 @@ class Handler:
         if ip_dest and udp_port and tcp_port:
             self.set_tcp_client(ip_dest, int(tcp_port))
             self.set_udp_client(ip_dest, int(udp_port))
-            messagebox.showinfo("Success", "Successfully connected to server")
+            messagebox.showinfo(
+                "Success", "Successfully connected to server and exchanged public keys"
+            )
         else:
             messagebox.showerror("Error", "Invalid IP address or ports")
 
@@ -31,21 +34,32 @@ class Handler:
             self.udp_client.close()
         root.destroy()
 
-    def send_udp_msg(self):
+    def send_udp_msg(self, msg=None):
         if self.udp_client:
-            msg = entry_msg.get()
+            if not msg:
+                msg = entry_msg.get()
             self.udp_client.send_msg(msg)
-            messagebox.showinfo("Success", "Successfully sent UDP message")
+            if msg != "q":
+                messagebox.showinfo("Success", "Successfully sent UDP message")
         else:
             messagebox.showerror("Error", "No UDP connection established")
 
-    def send_tcp_msg(self):
+    def send_tcp_msg(self, msg=None):
         if self.tcp_client:
-            msg = entry_msg.get()
+            if not msg:
+                msg = entry_msg.get()
             self.tcp_client.send_msg(msg)
-            messagebox.showinfo("Success", "Successfully sent TCP message")
+            if msg != "q":
+                messagebox.showinfo("Success", "Successfully sent TCP message")
         else:
             messagebox.showerror("Error", "No TCP connection established")
+
+    def on_closing(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self.send_tcp_msg("q")
+            self.send_udp_msg("q")
+            self.disconnect()
+
 
 def handle_protocol(protocol):
     if protocol.lower() == "udp":
@@ -59,11 +73,15 @@ def handle_protocol(protocol):
         if text:
             messagebox.showinfo("Success", text)
     elif protocol.lower() == "q":
+        handler.send_tcp_msg("q")
+        handler.send_udp_msg("q")
         handler.disconnect()
     else:
         messagebox.showerror("Error", "Invalid protocol. Please try again.")
 
+
 handler = Handler()
+
 
 root = tk.Tk()
 root.geometry("600x600")
@@ -89,7 +107,11 @@ label.pack(pady=10)
 entry3 = tk.Entry(frame, text="UDP Port")
 entry3.pack(pady=6, padx=5)
 
-button_connect = tk.Button(frame, text="Connect to server", command=lambda: handler.connect(entry1.get(), entry2.get(), entry3.get()))
+button_connect = tk.Button(
+    frame,
+    text="Connect to server",
+    command=lambda: handler.connect(entry1.get(), entry2.get(), entry3.get()),
+)
 button_connect.pack(pady=12, padx=10)
 
 label = tk.Label(frame, text="Message")
@@ -106,5 +128,7 @@ button_tcp.pack(pady=12, padx=10)
 
 button_quit = tk.Button(frame, text="Quit (Q)", command=lambda: handle_protocol("q"))
 button_quit.pack(pady=12, padx=10)
+
+root.protocol("WM_DELETE_WINDOW", handler.on_closing)
 
 root.mainloop()

@@ -9,6 +9,8 @@ class ChatBot:
         self.api_key = os.environ.get("OPENAI_API_KEY")
 
     def ask(self, question, context):
+        pre_prompt = "You're a chatbot for a quick one to one chat application with a human. Limit your responses to the following questions to a sentence or 2 max."
+        context = [{"role": "assistant", "content": pre_prompt}] + context
         url = "https://api.openai.com/v1/chat/completions"
         headers = {
             "Content-Type": "application/json",
