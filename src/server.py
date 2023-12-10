@@ -20,14 +20,14 @@ class Server:
             try:
                 msg, address = tcp_conn.recv_msg()
                 if msg.lower() == "q":
-                    print(f"Client {address} disconnected")
+                    print(f"Client {address} disconnected\n")
                     tcp_conn.close()
                     break
                 address_key = address[0] + ", " + str(address[1])
                 if msg:
                     if address_key not in self.user_context:
                         self.user_context[address_key] = {"conversation": []}
-                    print(f"Received message from {address}: {msg} over TCP")
+                    print(f"\nReceived message from {address}: {msg} over TCP")
                     if msg.lower() == "e":
                         self.user_context[address_key]["conversation"] = []
                         print(f"Context cleared for client: {address_key}")
@@ -44,7 +44,7 @@ class Server:
                             self.user_context[address_key]["conversation"].append(
                                 {"role": "assistant", "content": response}
                             )
-                            print(f"Sent message to client: {response}")
+                            print(f"Sent message to client: {response}\n")
                         except OverflowError as e:
                             print(e)
                             tcp_conn.send_msg("Encryption failed. Response too long.")
@@ -62,7 +62,7 @@ class Server:
                 address_key = address[0] + ", " + str(address[1])
                 if msg:
                     if msg.lower() == "q":
-                        print(f"Client {address} disconnected")
+                        print(f"\nClient {address} disconnected")
                         break
                     print(f"Received message from {address}: {msg} over UDP")
                     if msg.lower() == "e":
