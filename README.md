@@ -6,7 +6,7 @@ I. Team members:
 
 	- Mohannad Shehata 1006774787
 	- Leila Cheraghi Seifabad  1007465495
-  - Maaz Hashmi 1006804718
+ 	- Maaz Hashmi 1006804718
 
 II. Rationale:
 
