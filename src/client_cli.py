@@ -21,12 +21,14 @@ class Handler:
         if ip_dest != "" and udp_port != "" and tcp_port != "":
             self.set_tcp_client(ip_dest, int(tcp_port))
             self.set_udp_client(ip_dest, int(udp_port))
+            return 1
         else:
             print("Invalid IP address or ports")
-
+            return 0
         if not self.tcp_client or not self.udp_client:
             print("Error connecting to server")
-
+            return 0
+            		
     def disconnect(self):
         if self.udp_client is not None:
             self.udp_client.close()
@@ -47,7 +49,10 @@ class Handler:
 
 
 handler = Handler()
-handler.connect(ip_addr, udp_port, tcp_port)
+while(not handler.connect(ip_addr, udp_port, tcp_port)):
+	ip_addr = input("IP Address: ")
+	tcp_port = input("TCP Port: ")
+	udp_port = input("UDP Port: ")
 
 while True:
     protocol = input(
@@ -59,6 +64,11 @@ while True:
             if msg.lower() == "e":
                 handler.send_udp_msg(msg)
                 break
+            elif msg.lower() == "q":
+                handler.send_tcp_msg("q")
+                handler.send_udp_msg("q")
+                handler.disconnect()
+                exit(0)
             handler.send_udp_msg(msg)
             text = handler.udp_client.recv_msg()
             if text:
@@ -71,6 +81,11 @@ while True:
             if msg.lower() == "e":
                 handler.send_tcp_msg(msg)
                 break
+            elif msg.lower() == "q":
+                handler.send_tcp_msg("q")
+                handler.send_udp_msg("q")
+                handler.disconnect()
+                exit(0)
             handler.send_tcp_msg(msg)
             text = handler.tcp_client.recv_msg()
             if text:
