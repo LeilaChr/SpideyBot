@@ -78,6 +78,7 @@ To run the cli client, we type the following:
 Then when prompted to connect to the server, we input the same IP address, TCP port, and UDP port we used when running the server command above.
 
 Then it should display the following:
+
 ![image](https://github.com/LeilaChr/SpideyBot/assets/88001942/0d980be3-127b-4f83-9ed9-fcdea4f84d06)
 
 The user then chooses whether to send UDP,TCP, or disconnect from the server by typing UDP,TCP, or Q respectively. Once the user makes the choice,
@@ -91,15 +92,18 @@ To run the UI client, we run the following:
 > python3 src/client_ui.py
 
 The following image should appear after a successful execution
+
 ![image](https://github.com/LeilaChr/SpideyBot/assets/88001942/d3f9292d-692c-4146-9b88-df2de5fb2c61)
 
 We then fill out the IP address and TCP/UDP port info in the same fashion as the CLI client in the respective text boxes.
 After that we press connect and if the connection was successful we should get a popup message as follows
+
 ![image](https://github.com/LeilaChr/SpideyBot/assets/88001942/f0af2743-7346-4f0b-87c2-654704a237f0)
 
 Then we can type the message in the message textbox and click "Send TCP" or "Send UDP" to send using the respective format
 It should display a popup message saying the message was sent successfully and, upon clicking ok, display the actual
 response in a popup message as follows
+
 ![image](https://github.com/LeilaChr/SpideyBot/assets/88001942/4253a026-ac95-492a-a085-715c8af4bc85)
 
 Finally to close the connection one can click quit.
