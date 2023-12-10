@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 handler = None
 
+
 class Handler:
     def __init__(self) -> None:
         self.udp_client = None
@@ -61,38 +62,47 @@ help_message = """
         !quit - Quit the bot
         ```
         """
+
+
 @bot.event
 async def on_ready():
     print("Bot is ready")
+
 
 @bot.command(name="help")
 async def help(ctx):
     await ctx.send(help_message)
 
+
 @bot.command(name="hi")
 async def hi(ctx):
     await ctx.send("Hello!")
 
+
 @bot.command(name="connect", help="Connect to the server")
 async def connect(ctx, ip, tcp_port, udp_port):
+    await ctx.send("Connecting to the server...")
     global handler
     handler = Handler()
     handler.connect(ip, int(tcp_port), int(udp_port))
-    await ctx.send("Connected to the server.")
+    await ctx.send("Successfully connected to the server and exchanged public keys.")
+
 
 @bot.command(name="disconnect", help="Disconnect from the server")
-async def disconnect( ctx):
+async def disconnect(ctx):
     if handler:
+        handler.send_tcp_msg("q")
+        handler.send_udp_msg("q")
         handler.disconnect()
         await ctx.send("Disconnected from the server.")
     else:
         await ctx.send("No connection to disconnect.")
 
+
 @bot.command(name="send_udp", help="Send a UDP message")
 async def send_udp(ctx, *message):
     if handler:
-        full_message = ' '.join(message)
-        print
+        full_message = " ".join(message)
         handler.send_udp_msg(full_message)
         await ctx.send("Sent UDP message.")
         text = handler.udp_client.recv_msg()
@@ -103,10 +113,11 @@ async def send_udp(ctx, *message):
     else:
         await ctx.send("No UDP connection established.")
 
+
 @bot.command(name="send_tcp", help="Send a TCP message")
-async def send_tcp( ctx, *message):
+async def send_tcp(ctx, *message):
     if handler:
-        full_message = ' '.join(message)
+        full_message = " ".join(message)
         handler.send_tcp_msg(full_message)
         await ctx.send("Sent TCP message.")
         await asyncio.sleep(2)
@@ -119,16 +130,17 @@ async def send_tcp( ctx, *message):
     else:
         await ctx.send("No TCP connection established.")
 
+
 @bot.command(name="quit", help="Quit the bot")
 async def quit_bot(ctx):
     if handler:
+        handler.send_tcp_msg("q")
+        handler.send_udp_msg("q")
         handler.disconnect()
     await ctx.send("Bot has quit.")
     await bot.close()
 
 
-
-# Run the bot with your Discord token
 load_dotenv()
 token = str(os.environ.get("DISCORD_TOKEN"))
 bot.run(token)
