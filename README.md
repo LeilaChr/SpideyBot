@@ -137,15 +137,19 @@ Prints the commands the bot has along with a summary of their use
 Connects to the server with these details
 
 > !disconnect
+
 Disconnects from the server
 
 > !send_tcp <message>
+
 Sends a <message> as a tcp packet to the server and prints out the server's response
 
 > !send_udp <message>
+
 Sends a <message> as a udp packet to the server and prints out the server's response
 
-> !quit 
+> !quit
+
 Shuts the discord bot down
 
 Note that the first two commands do not require a connection to the server
