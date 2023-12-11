@@ -141,4 +141,13 @@ Shuts the discord bot down
 
 Note that the first two commands do not require a connection to the server
 
+- Docker 
+
+An alternative to running the cli or discord client using docker containers is as follows:
+- run `docker build -t spideybot .`
+- then `docker run -it spideybot`
+- open up a new terminal and run `docker ps` and copy the container id for spideybot
+- in the new terminal run `docker exec -it <CONTAINER-ID> bash`
+- now in one terminal run server.py like we do `python3 src/server.py localhost 3000 3001`
+- and in the other run the client `python3 src/client_cli.py`
 
