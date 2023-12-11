@@ -62,6 +62,9 @@ After the venv was created, we can setup as follows:
 Then we should be in the virtual environment with all the needed dependencies to run the project in place. Hereafter we assume
 we are running from within the venv, if we close the terminal and open it again the command "source spiderybot/bin/activate" suffices.
 
+Moreover, one would have to create a .env file and add both their own OpenAI API key for the server to communicate with ChatGpt
+and their own discord token so the bot version of the client can access the server and read the chat to interact with the user>
+
 - Running the Server
 
 To run the server we run the following command:
@@ -108,5 +111,34 @@ response in a popup message as follows
 
 Finally to close the connection one can click quit.
 
+- Running the discord bot
 
+To run the bot, we type the following:
+> python3 src/client_discord.py
   
+Then we go to the discord channel where this bot has a token (remember you have to add the token to the .env file), we can type any of the following commands in the chat:
+
+> !hi
+The reply will be Hello!
+
+> !help
+Prints the commands the bot has along with a summary of their use
+
+> !connect <IP> <TCP port> <UDP port>
+Connects to the server with these details
+
+> !disconnect
+Disconnects from the server
+
+> !send_tcp <message>
+Sends a <message> as a tcp packet to the server and prints out the server's response
+
+> !send_udp <message>
+Sends a <message> as a udp packet to the server and prints out the server's response
+
+> !quit 
+Shuts the discord bot down
+
+Note that the first two commands do not require a connection to the server
+
+
