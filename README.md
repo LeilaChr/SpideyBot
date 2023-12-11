@@ -125,12 +125,15 @@ To run the bot, we type the following:
 Then we go to the discord channel where this bot has a token (remember you have to add the token to the .env file), we can type any of the following commands in the chat:
 
 > !hi
+
 The reply will be Hello!
 
 > !help
+
 Prints the commands the bot has along with a summary of their use
 
 > !connect <IP> <TCP port> <UDP port>
+
 Connects to the server with these details
 
 > !disconnect
