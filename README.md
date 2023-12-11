@@ -1,55 +1,21 @@
-# SpideyBot ..
-Chatbot that builds on principles of networking such as UDP,TCP packets and encryption. Available in cli,UI, or as a discord bot.
-Invokes ChatGpt on input supplied to the bot and relays Gpt's output back to the user.
+# SpideyBot
 
-I. Team members:
+ChatBot that builds on principles of networking such as UDP, TCP packets and encryption. Available in CLI, UI, or as a Discord bot.
+Invokes OpenAI’s GPT-3.5-turbo LLM on input supplied to the bot and relays GPT's output back to the user.
 
-	- Mohannad Shehata 1006774787
-	- Leila Cheraghi Seifabad  1007465495
- 	- Maaz Hashmi 1006804718
+# Report
 
-II. Rationale:
+See `report.pdf` for detailed analysis, descriptions and implementation details.
 
-After learning about networks we wanted to investigate how much we take for granted in our daily use of applications 
-from the networking point of view so we started with an existing application and used our newfound networks 
-knowledge to connect a user to these services (along with additional features we explore below).
+# Team Members
 
-III. Methodology:
+    - Mohannad Shehata 1006774787
+    - Leila Cheraghi Seifabad 1007465495
+    - Maaz Hashmi 1006804718
 
-We create a server that we can process TCP/UDP requests sent by a client and then extract the messages inside them
-and uses them as queries to ChatGpt. After receiving a response it sends the response back to the client. Interactions
-between the client and the server are encrypted,and both exchange public keys as soon as the connection is formed.
+# Usage
 
-We allow the client the option to choose between sending either UDP or TCP packages, and it is possible to switch between
-both without terminating the program (see below). In addition to the CLI option, we also give the users the possibility of 
-using a UI or having it communicate via a discord bot added in the desired server.
-
-The main obstacle we faced was that the server/client behaved differently based on the device they were running on. 
-We recommend running it on linux or at least running it in a docker container.
-
-IV. Implementation:
-
-We create a server that can communicate with both ChatGpt and clients. For it to communicate with ChatGpt it uses 
-and OpenAI API key which we do not supply here for privacy reasons,but one can easily create their own. To decrease response times 
-and make the interaction resemble that of a usual chatbot we first prompt ChatGpt to send shorter messages before sending messages, using
-the following:
-
-> "You're a chatbot for a quick one to one chat application with a human. Limit your responses to the following questions to a sentence or 2 max."
-
-We also use multiprocessing to enable the server to run 2 distinct processes to handle TCP and UDP communications respectively.
-
-As for the client, we have multiple versions with similar implemntation principles, or more precisely the mechanism by which they send messages
-to the server is similar. The cli one allows users to send messages from the terminal, the UI one allows users to input their queries in a text box
-and receive the answer in a format similar to usual desktop applications, while the discord bot interfaces with a particular server. The commands
-are entered through a discord chat and read by a client program, which sends it to a server program, receives a response, and then posts the response
-back to discord.
-
-For encryption, we generate two RSA key pairs, one for client to server and the other for the reverse direction. The 
-party that generated the key pair sends its public key to the other party, establishing a secure communications channel.
-
-V. Instructions for Running the Project 
-
-We strongly advise running the project in a virtual environment(venv), so the first step would be to create our own by running the following:
+We strongly advise running the project in a virtual environment (venv) and using Linux machine or a Docker container (see below). Firstly, add the `.env` provided with the submission to the `src/` directory. The next step would be to create our own by running the following:
 
 `sudo apt install python3.10-venv`
 
@@ -62,12 +28,12 @@ After the venv was created, we can setup as follows:
 `pip install -r requirements.txt`
 
 Then we should be in the virtual environment with all the needed dependencies to run the project in place. Hereafter we assume
-we are running from within the venv, if we close the terminal and open it again the command "source spiderybot/bin/activate" suffices.
+we are running from within the venv, if we close the terminal and open it again the command "source spideybot/bin/activate" suffices.
 
-Moreover, one would have to create a .env file and add both their own OpenAI API key for the server to communicate with ChatGpt
+Moreover, one would have to create a .env file and add both their own OpenAI API key for the server to communicate with GPT
 and their own discord token so the bot version of the client can access the server and read the chat to interact with the user>
 
-- Running the Server
+## Running the Server
 
 To run the server we run the following command:
 
@@ -76,7 +42,7 @@ To run the server we run the following command:
 It awaits client connection and should also display messages when clients connect or disconnect, or upon receiving a message
 from a client including the contents of such message.
 
-- Running the CLI client
+## Running the CLI client
 
 To run the cli client, we type the following:
 
@@ -93,7 +59,7 @@ they can type their queries to the server and it should reply back.
 
 To switch modes(TCP vs UDP) the user can type E and it will bring them back to the prompt where they choose UDP,TCP, or quit.
 
-- Running the UI client 
+## Running the UI client
 
 To run the UI client, we run the following:
 
@@ -116,12 +82,14 @@ response in a popup message as follows
 
 Finally to close the connection one can click quit.
 
-- Running the discord bot
+## Running the Discord client
+
+In order to use the Discord client, firstly add our Discord bot to a Discord server of your choosing, using the following link: https://discord.com/api/oauth2/authorize?client_id=1179101192912113794&permissions=274877983808&scope=bot. Note that you must have admin permissions to this server.
 
 To run the bot, we type the following:
 
 `python3 src/client_discord.py`
-  
+
 Then we go to the discord channel where this bot has a token (remember you have to add the token to the .env file), we can type any of the following commands in the chat:
 
 > !hi
@@ -132,7 +100,7 @@ The reply will be Hello!
 
 Prints the commands the bot has along with a summary of their use
 
-> !connect <IP> <TCP port> <UDP port>
+> !connect \<IP> \<TCP port> \<UDP port>
 
 Connects to the server with these details
 
@@ -140,13 +108,13 @@ Connects to the server with these details
 
 Disconnects from the server
 
-> !send_tcp <message>
+> !send_tcp \<message>
 
-Sends a <message> as a tcp packet to the server and prints out the server's response
+Sends a \<message> as a tcp packet to the server and prints out the server's response
 
-> !send_udp <message>
+> !send_udp \<message>
 
-Sends a <message> as a udp packet to the server and prints out the server's response
+Sends a \<message> as a udp packet to the server and prints out the server's response
 
 > !quit
 
@@ -154,13 +122,13 @@ Shuts the discord bot down
 
 Note that the first two commands do not require a connection to the server
 
-- Docker 
+## Docker
 
 An alternative to running the cli or discord client using docker containers is as follows:
+
 - run `docker build -t spideybot .`
 - then `docker run -it spideybot`
 - open up a new terminal and run `docker ps` and copy the container id for spideybot
 - in the new terminal run `docker exec -it <CONTAINER-ID> bash`
 - now in one terminal run server.py like we do `python3 src/server.py localhost 3000 3001`
 - and in the other run the client `python3 src/client_cli.py`
-
