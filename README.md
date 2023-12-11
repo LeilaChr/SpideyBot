@@ -51,13 +51,13 @@ V. Instructions for Running the Project
 
 We strongly advise running the project in a virtual environment(venv), so the first step would be to create our own by running the following:
 
-> sudo apt install python3.10-venv
-> python3 -m venv spideybot
+` sudo apt install python3.10-venv`
+` python3 -m venv spideybot`
 
 After the venv was created, we can setup as follows:
 
-> source spideybot/bin/activate
-> pip install -r requirements.txt
+`source spideybot/bin/activate`
+`pip install -r requirements.txt`
 
 Then we should be in the virtual environment with all the needed dependencies to run the project in place. Hereafter we assume
 we are running from within the venv, if we close the terminal and open it again the command "source spiderybot/bin/activate" suffices.
@@ -68,7 +68,7 @@ and their own discord token so the bot version of the client can access the serv
 - Running the Server
 
 To run the server we run the following command:
-> python3 src/server.py <IP> <TCP port> <UDP port>
+`python3 src/server.py <IP> <TCP port> <UDP port>`
 
 It awaits client connection and should also display messages when clients connect or disconnect, or upon receiving a message
 from a client including the contents of such message.
@@ -76,7 +76,7 @@ from a client including the contents of such message.
 - Running the CLI client
 
 To run the cli client, we type the following:
-> python3 src/client.py
+`python3 src/client.py`
 
 Then when prompted to connect to the server, we input the same IP address, TCP port, and UDP port we used when running the server command above.
 
@@ -92,7 +92,7 @@ To switch modes(TCP vs UDP) the user can type E and it will bring them back to t
 - Running the UI client 
 
 To run the UI client, we run the following:
-> python3 src/client_ui.py
+`python3 src/client_ui.py`
 
 The following image should appear after a successful execution
 
@@ -114,7 +114,7 @@ Finally to close the connection one can click quit.
 - Running the discord bot
 
 To run the bot, we type the following:
-> python3 src/client_discord.py
+`python3 src/client_discord.py`
   
 Then we go to the discord channel where this bot has a token (remember you have to add the token to the .env file), we can type any of the following commands in the chat:
 
