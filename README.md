@@ -51,14 +51,12 @@ V. Instructions for Running the Project
 
 We strongly advise running the project in a virtual environment(venv), so the first step would be to create our own by running the following:
 
-` sudo apt install python3.10-venv`
-
-` python3 -m venv spideybot`
+`sudo apt install python3.10-venv`
+`python3 -m venv spideybot`
 
 After the venv was created, we can setup as follows:
 
 `source spideybot/bin/activate`
-
 `pip install -r requirements.txt`
 
 Then we should be in the virtual environment with all the needed dependencies to run the project in place. Hereafter we assume
